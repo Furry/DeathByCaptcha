@@ -1,0 +1,9 @@
+{
+  "name": "deathbycaptcha",
+  "version": "0.0.1",
+  "description": "A wrapper around the DeathByCaptcha API",
+  "main": "dist/index.js",
+  "repository": "https://github.com/Furry/DeathByCaptcha",
+  "author": "Furry <ender@thefluegges.com>",
+  "license": "MIT"
+}
