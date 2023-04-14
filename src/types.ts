@@ -8,5 +8,15 @@ export type AccountInformation = {
     rate: number; // Rate
     balance: number; // Current balance
     is_banned: boolean; // Ban status
-    status: number; // Response status ?
+};
+
+export type ServerStatus = {
+    todays_accuracy: number; // Accuracy
+    solved_in: number; // Average solve time
+    is_service_overloaded: boolean; // Overload status
+};
+
+export type CaptchaResponse = {
+    id: number,
+    response: string
 }
