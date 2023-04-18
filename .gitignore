@@ -1,4 +1,7 @@
-/dist
-/node_modules
+dist/
+node_modules/
+pypy/
 
 .env
+yarn.lock
+tests/main.js

@@ -1,8 +1,8 @@
 import { Response } from "node-fetch";
 import { GenericObject } from "../types.js";
 
-const StatusMap: { [key: number] : string } = {
-    255: "Not Logged In / Invalid Credentials or Token"
+const AliasMap: { [key: string]: string } = {
+    "service-overload": "Servers are currently overloaded, please try again later.",
 }
 
 /**
@@ -35,7 +35,7 @@ export class DBCError extends Error {
 
         if (obj.status !== 0) {
             throw new DBCError(
-                StatusMap[obj.status] || "Unknown Error",
+                AliasMap[obj.error] || obj.error,
                 obj.status
             );
         }

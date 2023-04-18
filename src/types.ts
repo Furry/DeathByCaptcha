@@ -2,7 +2,6 @@ export type GenericObject =
     { [key: string]: any };
 
 // ! Account Types
-
 export type AccountInformation = {
     user: number; // UID
     rate: number; // Rate
@@ -17,6 +16,19 @@ export type ServerStatus = {
 };
 
 export type CaptchaResponse = {
-    id: number,
-    response: string
+    captcha: number; // Captcha ID
+    text: string; // Captcha text
+    is_correct: boolean; // Correctness
+}
+
+export interface ProxyOptions {
+    host: string;
+
+    // No otheres supported yet :(
+    proxyType: "http";
+}
+
+// ! Service Types
+export interface HCaptchaOptions {
+    proxy?: ProxyOptions;
 }

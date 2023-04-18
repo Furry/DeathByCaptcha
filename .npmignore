@@ -5,3 +5,5 @@ src/
 
 tsconfig.json
 .env
+.gitignore
+readme.md
