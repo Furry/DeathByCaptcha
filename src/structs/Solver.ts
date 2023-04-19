@@ -2,7 +2,7 @@ import { Account } from "./Account.js";
 
 import * as Utils from "../utils/general.js"
 import { DBCError } from "./DBCError.js";
-import { CaptchaResponse, FuncaptchaOptions, GeetestOptions, HCaptchaOptions, RecaptchaV2Options, RecaptchaV3Options } from "../types.js";
+import { CaptchaResponse, FuncaptchaOptions, GeetestOptions, GeetestV3Response, GeetestV4Response, GridType, HCaptchaOptions, RecaptchaCoordnateResponse, RecaptchaImageGroupResponse, RecaptchaV2Options, RecaptchaV3Options } from "../types.js";
 import fetch from "../utils/fetch.js";
 
 /**
@@ -47,8 +47,8 @@ export class Solver {
             })
             .then((res) => DBCError.Resolve(res));
 
-            if (res.text) {
-                return res;
+            if (res["text"]) {
+                return res as CaptchaResponse;
             }
         }
     }
@@ -99,7 +99,7 @@ export class Solver {
         })
         .then((res) => DBCError.Resolve(res));
 
-        return await this.pollResponse(res.captcha);
+        return await this.pollResponse(res.captcha) as CaptchaResponse;
     }
 
     /**
@@ -129,7 +129,7 @@ export class Solver {
         })
         .then((res) => DBCError.Resolve(res));
 
-        return await this.pollResponse(res.captcha);
+        return await this.pollResponse(res.captcha) as CaptchaResponse;
     }
 
     /**
@@ -159,7 +159,59 @@ export class Solver {
         })
         .then((res) => DBCError.Resolve(res));
 
-        return await this.pollResponse(res.captcha);
+        return await this.pollResponse(res.captcha) as CaptchaResponse;
+    }
+
+    /**
+     * Solves a coordnate recaptcha from a provided image.
+     * @param captchafile The Buffer of the image with coordnates to solve.
+     * @returns A RecaptchaCoordnateResponse object.
+     */
+    public async recaptchaCoordnates(captchafile: Buffer): Promise<RecaptchaCoordnateResponse> {
+        const payload = {
+            authtoken: this.account.token,
+            type: 2,
+            captchafile: "base64:" + captchafile.toString("base64")
+        }
+
+        const res = await fetch(`${this.account.apiUrl}/captcha`, {
+            method: "POST",
+            // @ts-ignore
+            headers: this.account.headers,
+            body: Utils.objToFormData(payload)
+        })
+        .then((res) => DBCError.Resolve(res));
+
+        return await this.pollResponse(res.captcha) as unknown as RecaptchaCoordnateResponse;
+    }
+
+    /**
+     * Solves a recaptcha Image Group from a provided image, banner, and banner text.
+     * @param captchafile The Buffer of the image captcha.
+     * @param banner The Buffer of the banner image.
+     * @param banner_text The text for the banner.
+     * @returns A RecaptchaImageGroupResponse object.
+     */
+    public async recaptchaImageGroup(captchafile: Buffer, banner: Buffer, banner_text: string, gridSize?: GridType): Promise<RecaptchaImageGroupResponse> {
+        const payload = {
+            authtoken: this.account.token,
+            captchafile: "base64:" + captchafile.toString("base64"),
+            banner: "base64:" + banner.toString("base64"),
+            banner_text,
+            type: 3
+        }
+
+        // if (gridSize) (payload as any)["grid"] = gridSize;
+
+        const res = await fetch(`${this.account.apiUrl}/captcha`, {
+            method: "POST",
+            // @ts-ignore
+            headers: this.account.headers,
+            body: Utils.objToFormData(payload)
+        })
+        .then((res) => DBCError.Resolve(res));
+
+        return await this.pollResponse(res.captcha) as unknown as RecaptchaImageGroupResponse;
     }
 
     /**
@@ -170,7 +222,7 @@ export class Solver {
      * @returns A CaptchaResponse object.
      * @throws DBCError
      */
-    public async funcaptcha(publickey: string, pageurl: string, funcaptchaOptions: FuncaptchaOptions = {}) {
+    public async funcaptcha(publickey: string, pageurl: string, funcaptchaOptions: FuncaptchaOptions = {}): Promise<CaptchaResponse> {
         const payload = {
             authtoken: this.account.token,
             type: 6,
@@ -189,7 +241,7 @@ export class Solver {
         })
         .then((res) => DBCError.Resolve(res));
 
-        return await this.pollResponse(res.captcha);
+        return await this.pollResponse(res.captcha) as CaptchaResponse;
     }
 
     /**
@@ -201,7 +253,7 @@ export class Solver {
      * @returns A CaptchaResponse object.
      * @throws DBCError
      */
-    public async geetestV3(challenge: string, gt: string, pageurl: string, geetestOptions: GeetestOptions = {}) {
+    public async geetestV3(challenge: string, gt: string, pageurl: string, geetestOptions: GeetestOptions = {}): Promise<GeetestV3Response> {
         const payload = {
             authtoken: this.account.token,
             type: 8,
@@ -221,7 +273,7 @@ export class Solver {
         })
         .then((res) => DBCError.Resolve(res));
 
-        return await this.pollResponse(res.captcha);
+        return await this.pollResponse(res.captcha) as unknown as GeetestV3Response;
     }
 
     /**
@@ -231,7 +283,7 @@ export class Solver {
      * @returns A CaptchaResponse object.
      * @throws DBCError
      */
-    public async geetestV4(captcha_id: string, pageurl: string) {
+    public async geetestV4(captcha_id: string, pageurl: string): Promise<GeetestV4Response> {
         const payload = {
             authtoken: this.account.token,
             type: 9,
@@ -249,6 +301,6 @@ export class Solver {
         })
         .then((res) => DBCError.Resolve(res));
 
-        return await this.pollResponse(res.captcha);
+        return await this.pollResponse(res.captcha) as unknown as GeetestV4Response;
     }
 }

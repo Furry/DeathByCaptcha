@@ -39,8 +39,22 @@ export interface RecaptchaV2Options extends GenericObject {
 
 export interface RecaptchaV3Options extends GenericObject {
     proxy?: ProxyOptions;
-    action: string,
-    min_score: number
+    action: string;
+    min_score: number;
+}
+
+export type Coordnate = [number, number];
+export interface RecaptchaCoordnateResponse {
+    captcha: number;
+    is_correct: boolean;
+    text: Coordnate[];
+}
+
+export type GridType = `${bigint}x${bigint}`;
+export interface RecaptchaImageGroupResponse {
+    captcha: number;
+    is_correct: boolean;
+    text: number[];
 }
 
 export interface FuncaptchaOptions extends GenericObject {
@@ -49,4 +63,27 @@ export interface FuncaptchaOptions extends GenericObject {
 
 export interface GeetestOptions extends GenericObject {
     proxy?: ProxyOptions;
+}
+
+export interface GeetestV3Response {
+    captcha: number;
+    is_correct: boolean;
+    text: {
+        challenge: string;
+        validate: string;
+        seccode: string;
+    }
+}
+
+export type Base64String = string;
+export interface GeetestV4Response {
+    captcha: number,
+    is_correct: boolean,
+    text: {
+        captcha_id: string;
+        lot_number: string;
+        pass_token: string;
+        gen_time: string;
+        captcha_output: Base64String;
+    }
 }
