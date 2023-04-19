@@ -2,7 +2,7 @@ import { Account } from "./Account.js";
 
 import * as Utils from "../utils/general.js"
 import { DBCError } from "./DBCError.js";
-import { CaptchaResponse, FuncaptchaOptions, HCaptchaOptions, RecaptchaV2Options, RecaptchaV3Options } from "../types.js";
+import { CaptchaResponse, FuncaptchaOptions, GeetestOptions, HCaptchaOptions, RecaptchaV2Options, RecaptchaV3Options } from "../types.js";
 import fetch from "../utils/fetch.js";
 
 /**
@@ -179,6 +179,66 @@ export class Solver {
                 publickey,
                 pageurl
             })
+        }
+
+        const res = await fetch(`${this.account.apiUrl}/captcha`, {
+            method: "POST",
+            // @ts-ignore
+            headers: this.account.headers,
+            body: Utils.objToFormData(payload)
+        })
+        .then((res) => DBCError.Resolve(res));
+
+        return await this.pollResponse(res.captcha);
+    }
+
+    /**
+     * Solves a geetest-v3 from a provided challenge, gt, and page URL.
+     * @param challenge The challenge of the geetest.
+     * @param gt The gt value of the geetest.
+     * @param pageurl The URL of the page with the geetest.
+     * @param geetestOptions The options to use for the geetest solve.
+     * @returns A CaptchaResponse object.
+     * @throws DBCError
+     */
+    public async geetestV3(challenge: string, gt: string, pageurl: string, geetestOptions: GeetestOptions = {}) {
+        const payload = {
+            authtoken: this.account.token,
+            type: 8,
+            geetest_params: Utils.flatten({
+                ...geetestOptions,
+                challenge,
+                gt,
+                pageurl
+            })
+        }
+
+        const res = await fetch(`${this.account.apiUrl}/captcha`, {
+            method: "POST",
+            // @ts-ignore
+            headers: this.account.headers,
+            body: Utils.objToFormData(payload)
+        })
+        .then((res) => DBCError.Resolve(res));
+
+        return await this.pollResponse(res.captcha);
+    }
+
+    /**
+     * Solves a geetest-v4 from a provided captcha_id and page URL.
+     * @param captcha_id The captcha_id of the geetest.
+     * @param pageurl The URL of the page with the geetest.
+     * @returns A CaptchaResponse object.
+     * @throws DBCError
+     */
+    public async geetestV4(captcha_id: string, pageurl: string) {
+        const payload = {
+            authtoken: this.account.token,
+            type: 9,
+            geetest_params: {
+                captcha_id,
+                pageurl
+            }
         }
 
         const res = await fetch(`${this.account.apiUrl}/captcha`, {

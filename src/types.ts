@@ -46,3 +46,7 @@ export interface RecaptchaV3Options extends GenericObject {
 export interface FuncaptchaOptions extends GenericObject {
     proxy?: ProxyOptions;
 }
+
+export interface GeetestOptions extends GenericObject {
+    proxy?: ProxyOptions;
+}

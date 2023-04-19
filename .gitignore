@@ -4,4 +4,4 @@ pypy/
 
 .env
 yarn.lock
-tests/main.js
+test/main.js

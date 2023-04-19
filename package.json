@@ -6,10 +6,13 @@
   "repository": "https://github.com/Furry/DeathByCaptcha",
   "author": "Furry <ender@thefluegges.com>",
   "license": "MIT",
+  "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
     "go": "tsc && node ./dist/index.js",
-    "single": "tsc && node ./tests/main.js"
+    "single": "tsc && node ./test/main.js",
+    "mocha": "mocha",
+    "test": "yarn mocha --parallel --timeout 900000"
   },
   "dependencies": {
     "node-fetch": "^3.3.1"
@@ -18,6 +21,8 @@
     "@types/node": "^18.15.11",
     "@types/node-fetch": "^2.6.3",
     "chai": "^4.3.7",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "mocha": "^10.2.0",
+    "mocha-parallel-tests": "^2.3.0"
   }
 }

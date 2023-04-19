@@ -68,7 +68,7 @@ export class Account {
      * ```
      */
     async status(): Promise<ServerStatus> {
-        return await fetch(`${this.apiUrl}/api/status?authtoken=${this._token}`, {
+        return await fetch(`${this.apiUrl}/status`, {
             method: "GET",
             headers: this.headers,
         })
