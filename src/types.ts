@@ -29,6 +29,20 @@ export interface ProxyOptions {
 }
 
 // ! Service Types
-export interface HCaptchaOptions {
+export interface HCaptchaOptions extends GenericObject {
+    proxy?: ProxyOptions;
+}
+
+export interface RecaptchaV2Options extends GenericObject {
+    proxy?: ProxyOptions;
+}
+
+export interface RecaptchaV3Options extends GenericObject {
+    proxy?: ProxyOptions;
+    action: string,
+    min_score: number
+}
+
+export interface FuncaptchaOptions extends GenericObject {
     proxy?: ProxyOptions;
 }
