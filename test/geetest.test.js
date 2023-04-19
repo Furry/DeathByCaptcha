@@ -6,7 +6,7 @@ import chai from "chai";
 dotenv.config();
 const { expect } = chai;
 
-describe("hCaptcha via https://vastus.github.io/login", () => {
+describe("Geetest Solves", () => {
     const solver = new DBC.Solver(process.env.AUTH_TOKEN);
 
     it("Should return a proper GeetestV4 response object", async () => {

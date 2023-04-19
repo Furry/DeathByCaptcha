@@ -7,7 +7,7 @@ import fs from "fs";
 dotenv.config();
 const { expect } = chai;
 
-describe("Image Captcha", () => {
+describe("Image Captcha Solves", () => {
     const solver = new DBC.Solver(process.env.AUTH_TOKEN);
     it("Should return a proper solved captcha", async () => {
         const data = fs.readFileSync("./test/images/simpleTextCaptcha.jpg");
